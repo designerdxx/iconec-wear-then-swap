@@ -133,19 +133,14 @@ img{display:block}
 /* ---------- veil ---------- */
 .veil{display:none}
 .js .veil{display:grid;place-items:center;position:fixed;inset:0;z-index:100;background:var(--white);color:var(--green);
-  transition:opacity .8s var(--e-io),visibility 0s .8s}
-/* the ring draws from the top, gathers for a moment, then opens out into the page while the white lifts off the hero */
-.veil i{display:block;width:40px;height:40px}
+  transition:opacity .7s var(--e-io),visibility 0s .7s}
+/* the ring draws from the top, then it and the white simply fade off the hero */
+.veil i{display:block;width:40px;height:40px;transition:opacity .35s var(--e-io)}
 .veil svg{transform:rotate(-90deg)}
 .veil circle{stroke-dasharray:63;stroke-dashoffset:63;animation:ring-draw 1s var(--e-io) .1s forwards}
 @keyframes ring-draw{to{stroke-dashoffset:0}}
-.leaving .veil i{animation:ring-open .95s forwards}
-@keyframes ring-open{
-  0%{transform:scale(1);opacity:1;animation-timing-function:cubic-bezier(.16,1,.3,1)}
-  18%{transform:scale(.9);opacity:1;animation-timing-function:cubic-bezier(.5,0,.75,.4)}
-  100%{transform:scale(10);opacity:0}
-}
 .ready .veil{opacity:0;visibility:hidden}
+.ready .veil i{opacity:0}
 .still .veil{display:none}
 
 /* ---------- nav ---------- */
@@ -774,9 +769,8 @@ img{display:block}
     const ring = $('.veil circle'), draw = !RM && ring.getAnimations ? ring.getAnimations()[0] : null;
     const drawn = draw ? Promise.race([draw.finished.catch(() => {}), wait(2400)]) : wait(RM ? 0 : 1100);
     Promise.all([Promise.race([assets, wait(2600)]), drawn])
-      .then(() => wait(RM ? 0 : 140))                                   /* a beat on the finished ring */
-      .then(() => { root.classList.add('leaving'); return wait(RM ? 0 : 170); })   /* it gathers */
-      .then(() => root.classList.add('ready'));                        /* then opens, and the hero comes up under it */
+      .then(() => wait(RM ? 0 : 160))            /* a beat on the finished ring */
+      .then(() => root.classList.add('ready'));  /* then it fades, and the hero comes up under it */
   }
 
   /* ---- smooth scroll ---- */
